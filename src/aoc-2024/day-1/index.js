@@ -29,18 +29,35 @@ fs.readFile(path.resolve(__dirname, "./input.txt"), "utf8")
       return;
     }
 
-    first.sort();
-    second.sort();
-
-    let distancesSum = 0;
-    for (let i = 0; i < first.length; i++) {
-      const num1 = first[i];
-      const num2 = second[i];
-      distancesSum += Math.abs(num1 - num2);
-    }
-
-    console.log(distancesSum);
+    firstPart(first, second);
+    secondPart(first, second);
   })
   .catch((err) => {
     console.error(err);
   });
+
+function firstPart(firstColumn, secondColumn) {
+  firstColumn.sort();
+  secondColumn.sort();
+
+  let distancesSum = 0;
+  for (let i = 0; i < firstColumn.length; i++) {
+    const num1 = firstColumn[i];
+    const num2 = secondColumn[i];
+    distancesSum += Math.abs(num1 - num2);
+  }
+
+  console.log("Part 1: ", distancesSum);
+}
+
+function secondPart(firstColumn, secondColumn) {
+  const appearanceCache = secondColumn.reduce((acc, number) => {
+    acc[number] = (acc[number] ?? 0) + 1;
+    return acc;
+  }, {});
+  const result = firstColumn.reduce((acc, current) => {
+    const appearanceCount = appearanceCache[current] ?? 0;
+    return appearanceCount * current + acc;
+  }, 0);
+  console.log("Part 2:", result);
+}
